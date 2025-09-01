@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Device Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: containerFadeIn 0.8s ease-out;
+        }
+        
+        @keyframes containerFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s infinite;
+        }
+        
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .verification-box {
+            background: linear-gradient(to right, #f5f7fa, #e4e8f0);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .verification-box:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transform: rotate(45deg);
+            animation: shineEffect 3s infinite;
+        }
+        
+        @keyframes shineEffect {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .loading-container {
+            margin: 25px 0;
+        }
+        
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            animation: progressAnimation 4s infinite;
+        }
+        
+        @keyframes progressAnimation {
+            0% { width: 0%; }
+            50% { width: 80%; }
+            100% { width: 100%; }
+        }
+        
+        .status-text {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #555;
+        }
+        
+        .success-icon {
+            color: #4CAF50;
+            font-size: 60px;
+            margin: 20px 0;
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0 15px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .ad-container {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ad-title {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        
+        .ad-content {
+            min-height: 90px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            font-style: italic;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-shield-alt"></i> Device Verification</h1>
+            <p>Secure verification process to protect your account</p>
+        </div>
+        
+        <div class="verification-box">
+            <div class="loading-container">
+                <div class="status-text">Scanning your device...</div>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            
+            <div class="success-message" style="display: none;">
+                <i class="fas fa-check-circle success-icon"></i>
+                <div class="status-text" style="font-weight: 600; color: #4CAF50;">Verification Successful</div>
+                <p>Your device has been verified successfully</p>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn btn-primary" id="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Bot
+            </button>
+        </div>
+    </div>
+    
+    <div class="ad-container">
+        <div class="ad-title">Advertisement</div>
+        <div class="ad-content">
+            Ad Space (300x100) - Your Ad Here
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Secure Verification System • Protected by Advanced Encryption</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const backBtn = document.getElementById('back-btn');
+        const progressBar = document.querySelector('.progress-bar');
+        const loadingContainer = document.querySelector('.loading-container');
+        const successMessage = document.querySelector('.success-message');
+
+        // 🔑 Replace this with the webhook URL you generated in /start
+        const webhookUrl = "YOUR_GENERATED_WEBHOOK_URL";
+
+        // Function to send verification result to Telebot webhook
+        function sendVerificationResult(status) {
+            fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: status })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Verification sent:", data);
+            })
+            .catch(err => {
+                console.error("Error:", err);
+            });
+        }
+
+        // Simulate verification process
+        function verify() {
+            loadingContainer.style.display = 'block';
+            successMessage.style.display = 'none';
+            progressBar.style.width = '0%';
+
+            let width = 0;
+            const interval = setInterval(function() {
+                if (width >= 100) {
+                    clearInterval(interval);
+
+                    // Show success after completion
+                    setTimeout(function() {
+                        loadingContainer.style.display = 'none';
+                        successMessage.style.display = 'block';
+
+                        // ✅ Send result back to bot
+                        // If passed:
+                        sendVerificationResult("ok");
+
+                        // ❌ Or if multiple accounts detected:
+                        // sendVerificationResult("fail");
+
+                    }, 500);
+                } else {
+                    width += 2;
+                    progressBar.style.width = width + '%';
+                }
+            }, 50);
+        }
+
+        // Back button functionality
+        backBtn.addEventListener('click', function() {
+            alert('Returning to the bot...');
+        });
+
+        // Start automatic verification simulation
+        verify();
+    });
+   </script>
+</body>
+</html>
